@@ -1,4 +1,4 @@
-name: Check docker hub releases
+name: Check new releases
 on:
   push:
     branches:
@@ -9,17 +9,28 @@ on:
 
 jobs:
   scan:
-    name: List Recent Updates
+    name: Checking new releases on docker hub
     runs-on: ubuntu-latest
     steps:
-      - name: Get latest tag
-        id: latest_tag
-        uses: jacobtomlinson/gha-get-docker-hub-tags@0.1.1
-        with:
-          org: 'php'  # Docker Hub user or organisation name
-          repo: 'php'  # Docker Hub repository name
+      - name: Checkout
+        uses: actions/checkout@v2
 
-      # Optionally check the tag we got back
-      - name: Check outputs
-        run: |
-          echo "Latest Image Tag - ${{ steps.latest_tag.outputs.tag }}"
+      - name: Scan Docker Repository
+        uses: dhet/scan-docker-tags-action@v1.0.1
+        with:
+          image: library/php
+          max-age-minutes: 4440 # 1 day in minutes
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          tag-regex: \d+\.\d+\.\d+$
+        id: scan
+
+      - name: Print
+        run: "echo 'Recent updates: ${{ steps.scan.outputs.tags }}'"
+
+#      - name: Call Publish docker hub workflow
+#        if: ${{ steps.scan.outputs.tags }}
+#        run: "echo RUN :D"
+#        uses: 3lever/php/.github/workflows/publish_docker_hub.yml@main
+#        with:
+#          php_version: ${{ steps.scan.outputs.tags }}

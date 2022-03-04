@@ -1,10 +1,11 @@
 name: Publish image on docker hub
 
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
       php_version:
           description: 'Choose the php version that you want to apply for example: 8.1'
+          type: string
           required: true
 
 jobs:
