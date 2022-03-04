@@ -1,0 +1,25 @@
+name: Check docker hub releases
+on:
+  push:
+    branches:
+      - master
+#on:
+#  schedule:
+#    - cron: '*/15 * * * *'
+
+jobs:
+  scan:
+    name: List Recent Updates
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get latest tag
+        id: latest_tag
+        uses: jacobtomlinson/gha-get-docker-hub-tags@0.1.1
+        with:
+          org: 'php'  # Docker Hub user or organisation name
+          repo: 'php'  # Docker Hub repository name
+
+      # Optionally check the tag we got back
+      - name: Check outputs
+        run: |
+          echo "Latest Image Tag - ${{ steps.latest_tag.outputs.tag }}"
