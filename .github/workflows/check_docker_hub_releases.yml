@@ -8,9 +8,11 @@ on:
 #    - cron: '*/15 * * * *'
 
 jobs:
-  scan:
+  check_release:
     name: Checking new releases on docker hub
     runs-on: ubuntu-latest
+    outputs:
+      php_version: ${{ steps.split.outputs.php_version }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -21,16 +23,31 @@ jobs:
           image: library/php
           max-age-minutes: 2880 # 1 day in minutes
           username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+#          password: ${{ secrets.DOCKERHUB_PASSWORD }}
 #          tag-regex: \d+\.\d+\.\d+$
         id: scan
 
       - name: Print
-        run: "echo 'Recent updates: ${{ steps.scan.outputs.tags{0} }}'"
+        run: "echo 'Recent updates: ${{ steps.scan.outputs.tags }}'"
 
-      - name: Call Publish docker hub workflow
-        if: ${{ steps.scan.outputs.tags }}
-        run: "echo RUN :D"
-#        uses: 3lever/php/.github/workflows/publish_docker_hub.yml@main
-#        with:
-#          php_version: ${{ steps.scan.outputs.tags }}
+      - uses: actions/setup-go@v2
+        with:
+          go-version: '1.16.1' # The Go version to download (if necessary) and use.
+
+      - id: split #php_version_json
+        run: echo "::set-output name=php_version::$(go run split.go 8.1.3,8.0.16)"
+
+#      - id: split
+#        run: echo '::set-output name=php_version::${{ steps.php_version_json.outputs }}'
+
+
+  docker_hub:
+    uses: 3lever/php/.github/workflows/publish_docker_hub.yml@master
+    needs: check_release
+#    if: ${{needs.jobs.check_release.steps.split.outputs.php_version}}
+    with:
+      php_version: ${{ needs.check_release.outputs.php_version }}
+    secrets:
+      dockerhub_username: ${{ secrets.DOCKERHUB_USERNAME }}
+      dockerhub_token: ${{ secrets.DOCKERHUB_TOKEN }}
