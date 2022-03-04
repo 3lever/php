@@ -19,18 +19,18 @@ jobs:
         uses: dhet/scan-docker-tags-action@v1.0.1
         with:
           image: library/php
-          max-age-minutes: 4440 # 1 day in minutes
+          max-age-minutes: 2880 # 1 day in minutes
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
-          tag-regex: \d+\.\d+\.\d+$
+#          tag-regex: \d+\.\d+\.\d+$
         id: scan
 
       - name: Print
-        run: "echo 'Recent updates: ${{ steps.scan.outputs.tags }}'"
+        run: "echo 'Recent updates: ${{ steps.scan.outputs.tags{0} }}'"
 
-#      - name: Call Publish docker hub workflow
-#        if: ${{ steps.scan.outputs.tags }}
-#        run: "echo RUN :D"
+      - name: Call Publish docker hub workflow
+        if: ${{ steps.scan.outputs.tags }}
+        run: "echo RUN :D"
 #        uses: 3lever/php/.github/workflows/publish_docker_hub.yml@main
 #        with:
 #          php_version: ${{ steps.scan.outputs.tags }}
