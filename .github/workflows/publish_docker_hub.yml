@@ -1,13 +1,18 @@
 name: Publish image on docker hub
 
 on:
-  push:
-    branches:
-      - master
+  workflow_dispatch:
+    inputs:
+      php_version:
+          description: 'Choose the php version that you want to apply for example: 8.1'
+          required: true
 
 jobs:
   docker:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        variant: [ 'fpm', 'cli' ]
     steps:
       -
         name: Set up QEMU
@@ -26,7 +31,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: 3lever/php:latest,3lever/php:${{ env.PHP_VERSION }}-postgresql
-          build-args: "PHP_VERSION=${{ env.PHP_VERSION }}"
+          tags: 3lever/php:${{ env.PHP_VERSION }}-${{matrix.variant}}-postgresql
+          build-args: "PHP_VERSION=${{ env.PHP_VERSION }}-${{matrix.variant}}"
         env:
-          PHP_VERSION: 8.1-fpm
+          PHP_VERSION: ${{ github.event.inputs.php_version }}
