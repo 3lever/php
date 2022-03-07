@@ -24,6 +24,7 @@ jobs:
       matrix:
         php_version: ${{ fromJSON(inputs.php_versions || github.event.inputs.php_versions) }}
         variant: [ 'fpm', 'cli' ]
+        data_base: [ 'postgresql', 'mysql' ]
     steps:
       -
         name: Set up QEMU
@@ -42,7 +43,8 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: 3lever/php:${{ env.PHP_VERSION }}-postgresql
+          tags: 3lever/php:${{ env.PHP_VERSION }}-${{ matrix.data_base }}
           build-args: "PHP_VERSION=${{ env.PHP_VERSION }}"
+          target: base-${{ matrix.data_base }}
         env:
           PHP_VERSION: ${{matrix.php_version}}-${{matrix.variant}}

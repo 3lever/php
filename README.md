@@ -6,14 +6,10 @@ PHP Docker image
 
 You can see the images generated at [Docker hub](https://hub.docker.com/repository/docker/3lever/php)
 
-**What is missing?**
-- [x] It's missing to create GitHub actions to publish docker images on GitHub actions
-- [ ] Create someway to chose which database will be built (postgres, mysql, sql server ....)
-- [ ] Create heroku docker image (if it's necessary create a fullstack image too).
-
 **What there is in the image**
 - PHP
 - Composer
-- Postgresql extensions
+- Postgresql extensions (check the postgresql tags)
+- mysql extensions (check the mysql tags)
 - Zip
 - Intl
