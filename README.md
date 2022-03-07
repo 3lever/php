@@ -1,4 +1,4 @@
-PHP Database
+PHP Docker image
 ============
 
 [![Check new releases](https://github.com/3lever/php/actions/workflows/check_docker_hub_releases.yml/badge.svg)](https://github.com/3lever/php/actions/workflows/check_docker_hub_releases.yml)
