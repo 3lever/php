@@ -6,10 +6,19 @@ PHP Docker image
 
 You can see the images generated at [Docker hub](https://hub.docker.com/repository/docker/3lever/php)
 
-**What there is in the image**
+**What is there in default images**
 - PHP
 - Composer
 - Postgresql extensions (check the postgresql tags)
 - mysql extensions (check the mysql tags)
 - Zip
 - Intl
+
+**What is there in dev images**
+ - All from default images
+ - xdebug
+ - git
+ - wget
+ - docker
+ - heroku cli
+ - Node, yarn ( it'll help fullstack projects.)
