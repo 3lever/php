@@ -12,7 +12,7 @@ jobs:
     name: Checking new releases on docker hub
     runs-on: ubuntu-latest
     outputs:
-      php_version: ${{ steps.split.outputs.php_version }}
+      php_versions: ${{ steps.split.outputs.php_versions }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -34,15 +34,15 @@ jobs:
         with:
           go-version: '1.16.1' # The Go version to download (if necessary) and use.
 
-      - id: split #php_version_json
-        run: echo "::set-output name=php_version::$(go run split.go ${{ steps.scan.outputs.tags }})"
+      - id: split #php_versions_json
+        run: echo "::set-output name=php_versions::$(go run split.go ${{ steps.scan.outputs.tags }})"
 
   docker_hub:
     uses: 3lever/php/.github/workflows/publish_docker_hub.yml@master
     needs: check_release
-    if: ${{needs.jobs.check_release.steps.split.outputs.php_version}}
+    if: ${{needs.jobs.check_release.steps.split.outputs.php_versions}}
     with:
-      php_version: ${{ needs.check_release.outputs.php_version }}
+      php_versions: ${{ needs.check_release.outputs.php_versions }}
     secrets:
-      dockerhub_username: ${{ secrets.DOCKERHUB_USERNAME }}
-      dockerhub_token: ${{ secrets.DOCKERHUB_TOKEN }}
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
