@@ -23,7 +23,7 @@ RUN curl https://cli-assets.heroku.com/install.sh | sh
 RUN apt-get -y install docker.io
 
 #Nodejs and Yarn, It'll help some fullstack projects
-RUN curl -fsSL https://deb.nodesource.com/setup_15.x | bash - \
+RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - \
     && apt-get install -y nodejs \
     && npm install --global yarn
 
