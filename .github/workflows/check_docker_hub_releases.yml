@@ -40,7 +40,7 @@ jobs:
   docker_hub:
     uses: 3lever/php/.github/workflows/publish_docker_hub.yml@master
     needs: check_release
-    if: ${{needs.jobs.check_release.steps.split.outputs.php_versions}}
+    if: ${{needs.check_release.outputs.php_versions}}
     with:
       php_versions: ${{ needs.check_release.outputs.php_versions }}
     secrets:
