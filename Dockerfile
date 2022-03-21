@@ -13,6 +13,8 @@ RUN apt-get install -y libpq-dev libzip-dev zlib1g-dev libicu-dev \
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
+WORKDIR /app
+
 FROM base as base-dev
 
 VOLUME /var/run/docker.sock:/var/run/docker.sock:ro
