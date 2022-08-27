@@ -2,7 +2,7 @@ ARG PHP_VERSION
 ARG BASE_SUFIX
 
 
-FROM --platform=$BUILDPLATFORM php:${PHP_VERSION} as base
+FROM --platform=linux/amd64 --platform=linux/arm64 php:${PHP_VERSION} as base
 
 RUN apt-get update
 
