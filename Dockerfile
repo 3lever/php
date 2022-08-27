@@ -21,7 +21,7 @@ VOLUME /var/run/docker.sock:/var/run/docker.sock:ro
 
 RUN apt-get install -y git wget
 RUN pecl install xdebug && docker-php-ext-enable xdebug
-RUN curl https://cli-assets.heroku.com/install.sh | sh
+# RUN curl https://cli-assets.heroku.com/install.sh | sh
 RUN apt-get -y install docker.io
 
 #Nodejs and Yarn, It'll help some fullstack projects
